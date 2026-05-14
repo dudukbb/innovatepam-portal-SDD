@@ -1,82 +1,127 @@
+
 # InnovatEPAM Portal MVP
 
-Module 08 final course project MVP for the EPAM AI Tech Bootcamp. InnovatEPAM Portal is a local-first employee innovation management application where submitters can register, submit ideas, and track review outcomes while admins evaluate submissions and provide feedback.
+[![TypeScript Strict](https://img.shields.io/badge/typescript-strict-blue)](https://www.typescriptlang.org/) [![Lint Passed](https://img.shields.io/badge/lint-passed-brightgreen)](https://eslint.org/) [![Spec-It Compliant](https://img.shields.io/badge/spec--it-compliant-success)](specs/plan.md)
 
-## MVP Overview
-This repository delivers the core MVP workflow defined through SpecKit-driven, AI-assisted implementation:
-- submitter authentication
-- idea submission with attachment filename capture
-- personal dashboard with idea tracking
-- admin review dashboard with status filtering
-- admin evaluation actions with feedback timeline
+---
 
-The project is intentionally local-demo oriented. It does not claim deployment, backend services, or production-grade persistence.
+## 🚀 Project Overview
+**InnovatEPAM Portal** is a local-first employee innovation management MVP built for the EPAM AI Tech Bootcamp. It enables employees to submit ideas and track review outcomes, while admins (jury) evaluate submissions and provide feedback—all in a simple, demo-friendly web app.
 
-## Future Improvement / Production Roadmap
-These items are intentionally not implemented in the current MVP and are tracked as production-oriented follow-up work:
-- Database persistence migration from browser localStorage to SQLite or Postgres (with migrations/ORM).
-- Next.js Route Handlers under `app/api/*` for auth, ideas, and comments.
-- Full automated test suite (unit, component, integration, end-to-end) plus CI execution.
+- **MVP Purpose:** Showcase a complete, Spec-It-driven workflow for innovation management, with clear separation of employee (submitter) and admin (jury) roles.
+- **Submitter:** Register, log in, submit ideas, track status, view feedback.
+- **Admin/Jury:** Log in, review all ideas, update status, leave feedback.
 
-## Key Features Completed
-### Authentication and Roles
-- Role-based registration (submitter/admin) and login
-- Admin login
-- Session persistence using localStorage
-- Role-aware redirects and guarded admin access
-- Shared navbar with logout flow
+---
 
-### Idea Workflow
-- Submit idea at `/submit`
-- Validation with React Hook Form + Zod
-- Optional category and single attachment filename storage
-- Submitter dashboard at `/dashboard`
-- Idea detail route at `/ideas/[id]`
+## ✨ Core Features
+| Feature                | Description                                                      |
+|------------------------|------------------------------------------------------------------|
+| Registration/Login     | Register as submitter or admin; secure login/logout               |
+| Role-based Access      | Employee/admin flows, protected routes, role-aware navigation      |
+| Idea Submission        | Submit ideas with validation, optional category & attachment name  |
+| Dashboard              | Submitter dashboard for tracking own ideas                        |
+| Admin Review Workflow  | Admin dashboard, status filtering, review & feedback              |
+| Status Tracking        | Idea status: submitted, under review, accepted, rejected          |
+| Feedback/Comments      | Admin can leave feedback; submitter sees review timeline           |
+| Protected Routing      | All sensitive routes are access-controlled                         |
+| Demo Accounts          | Pre-seeded demo users for quick evaluation                        |
 
-### Admin Review Workflow
-- Admin dashboard at `/admin`
-- View all submitted ideas
-- Filter ideas by status
-- Update idea status
-- Leave evaluation feedback comments
-- Submitter visibility of latest feedback and review timeline
+---
 
-## Demo Credentials
-These accounts are intended for local presentation and evaluator testing.
+## 🛠️ Spec-It Workflow
+- **Constitution:** `.specify/memory/constitution.md`
+- **Specification:** `specs/spec.md`, `specs/tasks.md`, `specs/plan.md`
+- **Phased Plan:** Implementation tracked by phase (foundation, auth, idea, admin, polish)
+- **Tasks:** All MVP tasks checked off; roadmap items clearly marked
+- **Validation:** Manual test checklist, validation report, and phase docs in `docs/`
 
-- Submitter
-  - Email: `submitter@test.com`
-  - Password: `Password123!`
-- Admin
-  - Email: `admin@test.com`
-  - Password: `Password123!`
+---
 
-If your browser still contains older local demo data from previous runs, clear site localStorage once and reload the app.
+## ⚙️ Tech Stack
+- **Next.js 14** (App Router)
+- **React 18**
+- **TypeScript** (strict mode)
+- **Tailwind CSS**
+- **React Hook Form**
+- **Zod** (validation)
+- **localStorage** (demo persistence)
 
-## Tech Stack
-- Next.js 14 App Router
-- React 18
-- TypeScript (strict mode)
-- Tailwind CSS
-- React Hook Form
-- Zod
-- Browser localStorage with JSON seed files in `public/data`
+---
 
-## SpecKit / Spec-Driven Development Workflow
-This MVP was built using a specification-driven workflow aligned with the course sprint model:
+## 📁 Project Structure
+```
+innovatepam-portal-sdd/
+├── .specify/
+├── app/
+│   ├── admin/
+│   ├── dashboard/
+│   ├── ideas/
+│   ├── login/
+│   ├── register/
+│   ├── submit/
+│   └── ...
+├── docs/
+├── public/
+│   └── data/
+├── specs/
+├── src/
+│   ├── components/
+│   ├── lib/
+│   └── types/
+└── README.md
+```
 
-1. Define scope in SpecKit artifacts
-2. Break work into phased tasks
-3. Implement one MVP slice at a time
-4. Validate after each phase with type-check, lint, and local runtime checks
-5. Document technical decisions and lessons learned
+---
 
-Key artifacts:
-- `.specify/memory/constitution.md`
-- `specs/spec.md`
-- `specs/tasks.md`
-- `specs/data-model.md`
-- `specs/plan.md`
+## 🖥️ Local Setup
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Start the dev server:**
+   ```bash
+   npm run dev
+   ```
+3. **Open:** [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 👤 Demo Credentials
+| Role      | Email                | Password      |
+|-----------|----------------------|---------------|
+| Submitter | submitter@test.com   | Password123!  |
+| Admin     | admin@test.com       | Password123!  |
+
+---
+
+## ✅ Validation
+- `npm run type-check` — **Passed**
+- `npm run lint` — **Passed**
+- Manual validation — **Completed** (see `docs/VALIDATION_REPORT.md`)
+
+---
+
+## 🛣️ Roadmap / Future Improvements
+- Backend API routes (`app/api/*`)
+- SQLite/PostgreSQL persistence
+- Automated test suite (unit, component, E2E)
+- Deployment & CI/CD
+- Multi-user, multi-session support
+- Advanced admin analytics
+
+---
+
+## 📚 Documentation & References
+- [Spec-It Constitution](.specify/memory/constitution.md)
+- [MVP Plan & Tasks](specs/plan.md), [specs/tasks.md](specs/tasks.md)
+- [Validation Report](docs/VALIDATION_REPORT.md)
+- [Manual Test Checklist](docs/MANUAL_TEST_CHECKLIST.md)
+- [Demo Script](docs/DEMO_SCRIPT.md)
+
+---
+
+**This repository is a model of Spec-It-driven MVP delivery for the EPAM AI Tech Bootcamp. All MVP features are implemented, validated, and documented.**
 
 ## AI-Assisted Development Workflow
 GitHub Copilot was used as an implementation copilot throughout the sprint.
