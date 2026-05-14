@@ -15,6 +15,7 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const requestedRedirect = searchParams.get('redirect');
   const requestedRole = searchParams.get('role');
+  const registered = searchParams.get('registered');
 
   useEffect(() => {
     const currentSession = getSession();
@@ -62,6 +63,11 @@ export default function LoginPage() {
           {roleMessage ? (
             <div className="mt-6 rounded-2xl border border-blue-200/20 bg-blue-500/10 px-4 py-3 text-sm font-medium text-blue-100">
               {roleMessage}
+            </div>
+          ) : null}
+          {registered === '1' ? (
+            <div className="mt-4 rounded-2xl border border-emerald-300/40 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-100">
+              Registration completed. Please login with your new account.
             </div>
           ) : null}
           <div className="mt-8 space-y-4 rounded-2xl border border-white/10 bg-white/10 p-5 text-sm shadow-inner">

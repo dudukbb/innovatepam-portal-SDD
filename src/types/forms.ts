@@ -4,7 +4,8 @@ import { z } from 'zod';
 export const registerFormSchema = z.object({
   email: z.string().email(),
   name: z.string().min(2),
-  password: z.string().min(6),
+  password: z.string().min(8, 'Password must be at least 8 characters.'),
+  role: z.enum(['submitter', 'admin']),
 });
 
 export const loginFormSchema = z.object({

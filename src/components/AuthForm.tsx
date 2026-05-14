@@ -3,20 +3,43 @@
 import { useState } from 'react';
 import { ZodSchema } from 'zod';
 
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
+interface AuthFormField<T> {
+  name: keyof T;
+  label: string;
+  type?: 'text' | 'email' | 'password' | 'select';
+  options?: SelectOption[];
+  defaultValue?: string;
+}
+
 interface AuthFormProps<T> {
   schema: ZodSchema<T>;
-  fields: Array<{ name: keyof T; label: string; type?: string }>;
+  fields: AuthFormField<T>[];
   onSubmit: (values: T) => Promise<{ error?: string }>;
   submitLabel: string;
 }
 
 export function AuthForm<T>({ schema, fields, onSubmit, submitLabel }: AuthFormProps<T>) {
-  const [values, setValues] = useState<Record<string, string>>({});
+  const [values, setValues] = useState<Record<string, string>>(() => {
+    const initialValues: Record<string, string> = {};
+
+    fields.forEach((field) => {
+      if (field.defaultValue) {
+        initialValues[field.name as string] = field.defaultValue;
+      }
+    });
+
+    return initialValues;
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
@@ -47,15 +70,31 @@ export function AuthForm<T>({ schema, fields, onSubmit, submitLabel }: AuthFormP
             <label htmlFor={String(f.name)} className="block text-sm font-semibold leading-5 text-slate-800">
               {f.label}
             </label>
-            <input
-              id={String(f.name)}
-              name={String(f.name)}
-              type={f.type || 'text'}
-              value={values[f.name as string] || ''}
-              onChange={handleChange}
-              className="app-input"
-              autoComplete={f.type === 'password' ? 'new-password' : 'off'}
-            />
+            {f.type === 'select' ? (
+              <select
+                id={String(f.name)}
+                name={String(f.name)}
+                value={values[f.name as string] || ''}
+                onChange={handleChange}
+                className="app-input"
+              >
+                {(f.options ?? []).map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                id={String(f.name)}
+                name={String(f.name)}
+                type={f.type || 'text'}
+                value={values[f.name as string] || ''}
+                onChange={handleChange}
+                className="app-input"
+                autoComplete={f.type === 'password' ? 'new-password' : 'off'}
+              />
+            )}
             {errors[f.name as string] && (
               <div className="mt-1 text-xs font-medium text-rose-600">{errors[f.name as string]}</div>
             )}

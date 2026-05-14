@@ -20,7 +20,7 @@ These items are intentionally not implemented in the current MVP and are tracked
 
 ## Key Features Completed
 ### Authentication and Roles
-- Submitter registration and login
+- Role-based registration (submitter/admin) and login
 - Admin login
 - Session persistence using localStorage
 - Role-aware redirects and guarded admin access
@@ -131,7 +131,7 @@ Open the local URL printed by Next.js. On many machines this is `http://localhos
 
 ## Demo Flow
 Suggested evaluator flow:
-1. Login as submitter or register a new submitter account.
+1. Login as submitter or register a new account (select submitter/admin role), then continue from `/login`.
 2. Submit a new innovation idea.
 3. Review the idea on the submitter dashboard.
 4. Open the idea detail page.

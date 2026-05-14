@@ -12,7 +12,7 @@ Core layers:
 
 ## 2. Next.js App Router Structure
 Primary routes:
-- `/register` - submitter registration
+- `/register` - role-based registration (submitter/admin)
 - `/login` - authentication entry
 - `/dashboard` - submitter idea tracking
 - `/submit` - idea submission
@@ -41,12 +41,13 @@ Authentication model:
 - active session stored in localStorage (`innovatepam_session`)
 
 Flow:
-1. register/login writes session state
-2. app shell reads session on route change
-3. role-based route redirects:
+1. registration creates user only (no auto-login) and redirects to `/login`
+2. login writes session state
+3. app shell reads session on route change
+4. role-based route redirects:
    - submitter -> dashboard/submit
    - admin -> admin dashboard
-4. logout clears session and returns to login
+5. logout clears session and returns to login
 
 ## 5. Local Persistence Model
 Persistence strategy is local-first for MVP:

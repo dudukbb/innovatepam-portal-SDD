@@ -21,7 +21,8 @@ Option A:
 
 Option B:
 - Open `/register`
-- create a new submitter account
+- create a new account with role selection (submitter/admin)
+- show success message, then redirect to `/login` (no auto-login)
 - explain that registration is part of the MVP workflow
 
 ## 4. Submit Idea
