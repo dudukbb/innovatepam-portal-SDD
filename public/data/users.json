@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1",
+    "email": "submitter@test.com",
+    "name": "Submitter",
+    "role": "submitter",
+    "passwordHash": "demo-submit"
+  },
+  {
+    "id": "2",
+    "email": "admin@test.com",
+    "name": "Admin",
+    "role": "admin",
+    "passwordHash": "demo-admin"
+  }
+]
