@@ -180,7 +180,7 @@
 - [ ] Create `components/CommentsSection.tsx` (read-only)
 - [ ] Display: title, description, category, status, file, date
 - [ ] Show comments from admin
-- [ ] Show delete button if status = "submitted"
+- [x] Show delete button if status = "submitted"
 - [ ] Add back button
 - **Files:** `app/ideas/[id]/page.tsx`, `components/IdeaDetail.tsx`, `components/CommentsSection.tsx`
 - **Verification:** Can view full idea details with comments
@@ -189,10 +189,10 @@
 **Estimated:** 30 min | **Assigned:** [Developer]
 - [ ] Create GET handler for `/api/ideas/[id]`
 - [ ] Create DELETE handler for `/api/ideas/[id]`
-- [ ] Verify owner before delete
-- [ ] Only allow delete if status = "submitted"
+- [x] Verify owner before delete
+- [x] Only allow delete if status = "submitted"
 - **File:** `app/api/ideas/[id]/route.ts`
-- **Verification:** Can get and delete ideas correctly
+- **Verification:** Can get and delete ideas correctly (implemented in localStorage layer `src/lib/ideas.ts` for current MVP architecture)
 
 ---
 

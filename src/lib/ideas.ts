@@ -85,6 +85,34 @@ export async function addIdea(idea: Idea): Promise<void> {
   writeLocalStorage(IDEAS_KEY, ideas);
 }
 
+export async function deleteIdeaBySubmitter(ideaId: string, submitterId: string): Promise<{ success: boolean; error?: string }> {
+  const ideas = await getAllIdeas();
+  const index = ideas.findIndex((idea) => idea.id === ideaId);
+
+  if (index < 0) {
+    return { success: false, error: 'Idea not found.' };
+  }
+
+  const targetIdea = ideas[index];
+  if (targetIdea.createdById !== submitterId) {
+    return { success: false, error: 'You can only delete your own ideas.' };
+  }
+
+  if (targetIdea.status !== 'submitted') {
+    return { success: false, error: 'Only ideas with submitted status can be deleted.' };
+  }
+
+  ideas.splice(index, 1);
+  writeLocalStorage(IDEAS_KEY, ideas);
+
+  await ensureCommentsSeeded();
+  const comments = readLocalStorage<Comment[]>(COMMENTS_KEY, []);
+  const remainingComments = comments.filter((comment) => comment.ideaId !== ideaId);
+  writeLocalStorage(COMMENTS_KEY, remainingComments);
+
+  return { success: true };
+}
+
 export function isValidStatusTransition(current: IdeaStatus, next: IdeaStatus): boolean {
   const allowed: Record<IdeaStatus, IdeaStatus[]> = {
     submitted: ['submitted', 'under_review'],

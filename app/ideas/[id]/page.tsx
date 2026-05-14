@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { getSession, SessionUser } from '@/src/lib/auth';
-import { addAdminComment, getCommentsByIdeaId, getIdeaById, isValidStatusTransition, updateIdeaStatus } from '@/src/lib/ideas';
+import { addAdminComment, deleteIdeaBySubmitter, getCommentsByIdeaId, getIdeaById, isValidStatusTransition, updateIdeaStatus } from '@/src/lib/ideas';
 import { Comment, Idea, IdeaStatus } from '@/src/types/models';
 import { StatusBadge } from '@/src/components/StatusBadge';
 import { adminReviewFormSchema } from '@/src/types/forms';
@@ -31,6 +31,7 @@ export default function IdeaDetailPage() {
   const [commentDraft, setCommentDraft] = useState('');
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -102,6 +103,29 @@ export default function IdeaDetailPage() {
 
   const latestComment = comments[0] ?? null;
   const isAdmin = session?.role === 'admin';
+  const isSubmitterOwner = session?.role === 'submitter' && session.id === idea.createdById;
+  const canDeleteIdea = isSubmitterOwner && idea.status === 'submitted';
+
+  async function handleSubmitterDelete() {
+    if (!isSubmitterOwner || !session || !idea) return;
+
+    setFeedbackMessage(null);
+    setActionError(null);
+
+    const shouldDelete = window.confirm('Delete this idea? This action cannot be undone.');
+    if (!shouldDelete) return;
+
+    setDeleting(true);
+    const result = await deleteIdeaBySubmitter(idea.id, session.id);
+
+    if (!result.success) {
+      setDeleting(false);
+      setActionError(result.error ?? 'Unable to delete idea.');
+      return;
+    }
+
+    router.replace('/dashboard');
+  }
 
   async function handleAdminReviewSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -154,7 +178,19 @@ export default function IdeaDetailPage() {
           <h1 className="text-3xl font-semibold text-slate-900">{idea.title}</h1>
           <p className="mt-2 text-slate-600">Created {formatDate(idea.createdAt)}</p>
         </div>
-        <StatusBadge status={idea.status} />
+        <div className="flex items-center gap-3">
+          <StatusBadge status={idea.status} />
+          {canDeleteIdea ? (
+            <button
+              type="button"
+              onClick={() => void handleSubmitterDelete()}
+              disabled={deleting}
+              className="rounded-lg border border-rose-300 px-3 py-1.5 text-sm font-medium text-rose-700 transition hover:border-rose-400 hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {deleting ? 'Deleting...' : 'Delete Idea'}
+            </button>
+          ) : null}
+        </div>
       </div>
 
       <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -262,6 +298,8 @@ export default function IdeaDetailPage() {
           </form>
         </section>
       ) : null}
+
+      {!isAdmin && actionError ? <p className="mt-5 text-sm text-rose-700">{actionError}</p> : null}
 
       <Link
         href={session?.role === 'admin' ? '/admin' : '/dashboard'}

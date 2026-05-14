@@ -1,10 +1,10 @@
 "use client";
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { buildLoginRedirectUrl, getDefaultRouteForRole, getSession, SessionUser } from '@/src/lib/auth';
-import { getIdeasByUser } from '@/src/lib/ideas';
+import { deleteIdeaBySubmitter, getIdeasByUser } from '@/src/lib/ideas';
 import { Idea } from '@/src/types/models';
 import { StatusBadge } from '@/src/components/StatusBadge';
 
@@ -20,7 +20,35 @@ export default function DashboardPage() {
   const router = useRouter();
   const [session, setSession] = useState<SessionUser | null>(null);
   const [ideas, setIdeas] = useState<Idea[]>([]);
+  const [deletingIdeaId, setDeletingIdeaId] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const loadUserIdeas = useCallback(async (userId: string) => {
+    const userIdeas = await getIdeasByUser(userId);
+    setIdeas(userIdeas.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)));
+  }, []);
+
+  async function handleDeleteIdea(idea: Idea) {
+    if (!session) return;
+
+    setActionError(null);
+
+    const shouldDelete = window.confirm('Delete this idea? This action cannot be undone.');
+    if (!shouldDelete) return;
+
+    setDeletingIdeaId(idea.id);
+    const result = await deleteIdeaBySubmitter(idea.id, session.id);
+
+    if (!result.success) {
+      setActionError(result.error ?? 'Unable to delete idea.');
+      setDeletingIdeaId(null);
+      return;
+    }
+
+    await loadUserIdeas(session.id);
+    setDeletingIdeaId(null);
+  }
 
   useEffect(() => {
     async function loadDashboard() {
@@ -37,13 +65,12 @@ export default function DashboardPage() {
       }
 
       setSession(currentSession);
-      const userIdeas = await getIdeasByUser(currentSession.id);
-      setIdeas(userIdeas.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)));
+      await loadUserIdeas(currentSession.id);
       setLoading(false);
     }
 
     loadDashboard();
-  }, [router]);
+  }, [loadUserIdeas, router]);
 
   const hasIdeas = useMemo(() => ideas.length > 0, [ideas]);
 
@@ -63,6 +90,8 @@ export default function DashboardPage() {
         </Link>
       </div>
 
+      {actionError ? <p className="mb-4 text-sm text-rose-700">{actionError}</p> : null}
+
       {!hasIdeas ? (
         <div className="app-surface p-8 text-center sm:p-10">
           <h2 className="text-xl font-semibold text-slate-800">No ideas submitted yet</h2>
@@ -78,9 +107,21 @@ export default function DashboardPage() {
               </div>
               <p className="mt-3 text-sm text-slate-600">Category: {idea.category ?? 'Unspecified'}</p>
               <p className="mt-1 text-sm text-slate-600">Created: {formatDate(idea.createdAt)}</p>
-              <Link href={`/ideas/${idea.id}`} className="mt-5 inline-flex text-sm font-medium text-blue-600 transition hover:text-blue-700 hover:underline">
-                View details
-              </Link>
+              <div className="mt-5 flex items-center justify-between gap-3">
+                <Link href={`/ideas/${idea.id}`} className="inline-flex text-sm font-medium text-blue-600 transition hover:text-blue-700 hover:underline">
+                  View details
+                </Link>
+                {idea.status === 'submitted' ? (
+                  <button
+                    type="button"
+                    onClick={() => void handleDeleteIdea(idea)}
+                    disabled={deletingIdeaId === idea.id}
+                    className="rounded-lg border border-rose-300 px-3 py-1.5 text-sm font-medium text-rose-700 transition hover:border-rose-400 hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {deletingIdeaId === idea.id ? 'Deleting...' : 'Delete'}
+                  </button>
+                ) : null}
+              </div>
             </article>
           ))}
         </div>

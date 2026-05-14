@@ -276,6 +276,7 @@ Under Review (admin updates)
 - [x] Role distinction functional
 - [x] Idea submission working with file attachment
 - [x] Submitter can view own ideas
+- [x] Submitter can delete own idea only while status is "submitted"
 - [x] Admin dashboard shows all ideas
 - [x] Admin can update idea status
 - [x] Admin can add comments
