@@ -20,7 +20,7 @@ const STATUS_LABELS: Record<IdeaStatus, string> = {
 
 export function StatusBadge({ status }: StatusBadgeProps) {
   return (
-    <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_STYLES[status]}`}>
+    <span className={`inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide shadow-sm ${STATUS_STYLES[status]}`}>
       {STATUS_LABELS[status]}
     </span>
   );

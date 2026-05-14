@@ -12,6 +12,9 @@ export interface SessionUser {
   email: string;
 }
 
+const employeeRoutes = new Set(['/dashboard', '/submit', '/submit-idea', '/my-ideas']);
+const adminRoutes = new Set(['/admin']);
+
 const fallbackUsers: User[] = [
   {
     id: '1',
@@ -100,6 +103,11 @@ export async function findUserById(id: string): Promise<User | undefined> {
   return users.find((user) => user.id === id);
 }
 
+export async function getDemoUser(role: UserRole): Promise<User | undefined> {
+  const demoEmail = role === 'admin' ? 'admin@test.com' : 'submitter@test.com';
+  return findUserByEmail(demoEmail);
+}
+
 export async function addUser(user: User): Promise<void> {
   const users = await getAllUsers();
   users.push(user);
@@ -135,4 +143,35 @@ export function getSession(): SessionUser | null {
 export function clearSession(): void {
   if (!isBrowser()) return;
   window.localStorage.removeItem(SESSION_KEY);
+}
+
+export function getRequiredRoleForPath(path: string | null | undefined): UserRole | null {
+  if (!path) return null;
+
+  if (employeeRoutes.has(path)) return 'submitter';
+  if (adminRoutes.has(path)) return 'admin';
+
+  return null;
+}
+
+export function buildLoginRedirectUrl(path: string, role: UserRole): string {
+  const params = new URLSearchParams({ redirect: path, role: role === 'admin' ? 'admin' : 'employee' });
+  return `/login?${params.toString()}`;
+}
+
+export function getDefaultRouteForRole(role: UserRole): string {
+  return role === 'admin' ? '/admin' : '/dashboard';
+}
+
+export function getAuthorizedRedirectPath(role: UserRole, requestedPath: string | null | undefined): string {
+  if (!requestedPath) {
+    return getDefaultRouteForRole(role);
+  }
+
+  const requiredRole = getRequiredRoleForPath(requestedPath);
+  if (!requiredRole) {
+    return getDefaultRouteForRole(role);
+  }
+
+  return requiredRole === role ? requestedPath : getDefaultRouteForRole(role);
 }

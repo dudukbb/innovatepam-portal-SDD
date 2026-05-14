@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { IdeaDraftInput, IdeaForm } from '@/src/components/IdeaForm';
-import { getSession, SessionUser } from '@/src/lib/auth';
+import { buildLoginRedirectUrl, getDefaultRouteForRole, getSession, SessionUser } from '@/src/lib/auth';
 import { addIdea } from '@/src/lib/ideas';
 import { Idea } from '@/src/types/models';
 
@@ -24,12 +24,12 @@ export default function SubmitIdeaPage() {
     const currentSession = getSession();
 
     if (!currentSession) {
-      router.replace('/login');
+      router.replace(buildLoginRedirectUrl('/submit-idea', 'submitter'));
       return;
     }
 
     if (currentSession.role !== 'submitter') {
-      router.replace('/admin');
+      router.replace(getDefaultRouteForRole(currentSession.role));
       return;
     }
 
@@ -63,10 +63,10 @@ export default function SubmitIdeaPage() {
   }
 
   return (
-    <section className="mx-auto max-w-4xl px-4 py-10">
-      <div className="mb-6">
-        <h1 className="text-3xl font-semibold text-slate-900">Submit Innovation Idea</h1>
-        <p className="mt-2 text-slate-600">Share your idea with clear impact and optional supporting attachment.</p>
+    <section className="mx-auto max-w-4xl px-4 py-10 sm:py-12">
+      <div className="mb-7 max-w-2xl">
+        <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">Submit Innovation Idea</h1>
+        <p className="mt-2 leading-7 text-slate-600">Share your idea with clear impact and optional supporting attachment.</p>
       </div>
       <IdeaForm onSubmitIdea={handleSubmitIdea} />
     </section>

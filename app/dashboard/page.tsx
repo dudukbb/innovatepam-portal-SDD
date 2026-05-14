@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getSession, SessionUser } from '@/src/lib/auth';
+import { buildLoginRedirectUrl, getDefaultRouteForRole, getSession, SessionUser } from '@/src/lib/auth';
 import { getIdeasByUser } from '@/src/lib/ideas';
 import { Idea } from '@/src/types/models';
 import { StatusBadge } from '@/src/components/StatusBadge';
@@ -27,12 +27,12 @@ export default function DashboardPage() {
       const currentSession = getSession();
 
       if (!currentSession) {
-        router.replace('/login');
+        router.replace(buildLoginRedirectUrl('/dashboard', 'submitter'));
         return;
       }
 
       if (currentSession.role !== 'submitter') {
-        router.replace('/admin');
+        router.replace(getDefaultRouteForRole(currentSession.role));
         return;
       }
 
@@ -52,36 +52,33 @@ export default function DashboardPage() {
   }
 
   return (
-    <section className="mx-auto max-w-5xl px-4 py-10">
+    <section className="mx-auto max-w-5xl px-4 py-10 sm:py-12">
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-3xl font-semibold text-slate-900">Welcome, {session?.name}</h1>
-          <p className="mt-1 text-slate-600">Track the status of your submitted innovation ideas.</p>
+          <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">Welcome, {session?.name}</h1>
+          <p className="mt-2 max-w-2xl text-slate-600">Track the status of your submitted innovation ideas and continue the MVP review workflow.</p>
         </div>
-        <Link
-          href="/submit"
-          className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
-        >
+        <Link href="/submit-idea" className="app-button-primary">
           Submit New Idea
         </Link>
       </div>
 
       {!hasIdeas ? (
-        <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
+        <div className="app-surface p-8 text-center sm:p-10">
           <h2 className="text-xl font-semibold text-slate-800">No ideas submitted yet</h2>
           <p className="mt-2 text-slate-600">Start by submitting your first innovation idea.</p>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-5 sm:grid-cols-2">
           {ideas.map((idea) => (
-            <article key={idea.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <article key={idea.id} className="app-card p-5 sm:p-6">
               <div className="flex items-start justify-between gap-3">
                 <h2 className="text-lg font-semibold text-slate-900">{idea.title}</h2>
                 <StatusBadge status={idea.status} />
               </div>
-              <p className="mt-2 text-sm text-slate-600">Category: {idea.category ?? 'Unspecified'}</p>
+              <p className="mt-3 text-sm text-slate-600">Category: {idea.category ?? 'Unspecified'}</p>
               <p className="mt-1 text-sm text-slate-600">Created: {formatDate(idea.createdAt)}</p>
-              <Link href={`/ideas/${idea.id}`} className="mt-4 inline-block text-sm font-medium text-blue-600 hover:underline">
+              <Link href={`/ideas/${idea.id}`} className="mt-5 inline-flex text-sm font-medium text-blue-600 transition hover:text-blue-700 hover:underline">
                 View details
               </Link>
             </article>

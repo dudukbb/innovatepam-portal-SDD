@@ -40,27 +40,32 @@ export function AuthForm<T>({ schema, fields, onSubmit, submitLabel }: AuthFormP
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm mx-auto p-6 bg-white rounded shadow">
-      {fields.map(f => (
-        <div key={String(f.name)}>
-          <label className="block text-sm font-medium mb-1">{f.label}</label>
-          <input
-            name={String(f.name)}
-            type={f.type || 'text'}
-            value={values[f.name as string] || ''}
-            onChange={handleChange}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
-            autoComplete={f.type === 'password' ? 'new-password' : 'off'}
-          />
-          {errors[f.name as string] && (
-            <div className="text-red-500 text-xs mt-1">{errors[f.name as string]}</div>
-          )}
-        </div>
-      ))}
-      {formError && <div className="text-red-600 text-sm mb-2">{formError}</div>}
+    <form onSubmit={handleSubmit} className="app-surface mx-auto w-full max-w-md space-y-6 p-8 sm:p-9">
+      <div className="space-y-4">
+        {fields.map((f) => (
+          <div key={String(f.name)} className="space-y-1.5">
+            <label htmlFor={String(f.name)} className="block text-sm font-semibold leading-5 text-slate-800">
+              {f.label}
+            </label>
+            <input
+              id={String(f.name)}
+              name={String(f.name)}
+              type={f.type || 'text'}
+              value={values[f.name as string] || ''}
+              onChange={handleChange}
+              className="app-input"
+              autoComplete={f.type === 'password' ? 'new-password' : 'off'}
+            />
+            {errors[f.name as string] && (
+              <div className="mt-1 text-xs font-medium text-rose-600">{errors[f.name as string]}</div>
+            )}
+          </div>
+        ))}
+      </div>
+      {formError && <div className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{formError}</div>}
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        className="app-button-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
         disabled={loading}
       >
         {loading ? 'Processing...' : submitLabel}
