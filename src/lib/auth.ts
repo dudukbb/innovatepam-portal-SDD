@@ -3,6 +3,7 @@ import { User, UserRole } from '../types/models';
 
 const USERS_KEY = 'innovatepam_users';
 const SESSION_KEY = 'innovatepam_session';
+const DEMO_PASSWORD = 'Password123!';
 
 export interface SessionUser {
   id: string;
@@ -17,16 +18,23 @@ const fallbackUsers: User[] = [
     email: 'submitter@test.com',
     name: 'Submitter',
     role: 'submitter',
-    passwordHash: 'demo-submit',
+    passwordHash: DEMO_PASSWORD,
   },
   {
     id: '2',
     email: 'admin@test.com',
     name: 'Admin',
     role: 'admin',
-    passwordHash: 'demo-admin',
+    passwordHash: DEMO_PASSWORD,
   },
 ];
+
+function withDemoAccounts(users: User[]): User[] {
+  const demoEmails = new Set(fallbackUsers.map((user) => user.email.toLowerCase()));
+  const nonDemoUsers = users.filter((user) => !demoEmails.has(user.email.toLowerCase()));
+
+  return [...nonDemoUsers, ...fallbackUsers];
+}
 
 function isBrowser(): boolean {
   return typeof window !== 'undefined';
@@ -77,7 +85,9 @@ export async function ensureUsersSeeded(): Promise<void> {
 
 export async function getAllUsers(): Promise<User[]> {
   await ensureUsersSeeded();
-  return readUsersFromStorage();
+  const users = withDemoAccounts(readUsersFromStorage());
+  writeUsersToStorage(users);
+  return users;
 }
 
 export async function findUserByEmail(email: string): Promise<User | undefined> {

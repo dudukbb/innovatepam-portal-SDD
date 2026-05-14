@@ -86,8 +86,7 @@ Outcomes:
 - Fix: added latest feedback summary and review timeline section on idea detail.
 
 ## 8. Git Commit Reference
-- At documentation time, Phase 4 changes are implemented in working tree and validated locally.
-- No dedicated Phase 4 commit exists yet in `git log`.
+- `e54ca4f` - `Phase 4: implement admin evaluation workflow and review timeline`
 
 ## 9. Next Phase
 Finalize polish and testing hardening:

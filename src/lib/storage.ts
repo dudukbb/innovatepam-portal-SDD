@@ -38,14 +38,14 @@ const demoUsers: User[] = [
     email: 'submitter@test.com',
     name: 'Submitter',
     role: 'submitter',
-    passwordHash: 'demo-submit',
+    passwordHash: 'Password123!',
   },
   {
     id: '2',
     email: 'admin@test.com',
     name: 'Admin',
     role: 'admin',
-    passwordHash: 'demo-admin',
+    passwordHash: 'Password123!',
   },
 ];
 
