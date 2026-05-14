@@ -249,7 +249,9 @@ Under Review (admin updates)
 
 ---
 
-## 7. API Endpoints (Next.js Route Handlers)
+## 7. Production Roadmap: Planned API Endpoints (Next.js Route Handlers)
+
+Note: The current MVP implementation is local-first and client-side (`src/lib/*` + localStorage). The following endpoints are planned for production hardening.
 
 ### Authentication
 - `POST /api/auth/register` - Create user account
@@ -297,6 +299,8 @@ Under Review (admin updates)
 - Idea search/advanced filtering
 - Analytics dashboard
 - Multi-level approval workflow
+- SQLite/database-backed persistence
+- Full automated testing suite (unit/component/integration/e2e)
 
 ---
 

@@ -12,6 +12,12 @@ This repository delivers the core MVP workflow defined through SpecKit-driven, A
 
 The project is intentionally local-demo oriented. It does not claim deployment, backend services, or production-grade persistence.
 
+## Future Improvement / Production Roadmap
+These items are intentionally not implemented in the current MVP and are tracked as production-oriented follow-up work:
+- Database persistence migration from browser localStorage to SQLite or Postgres (with migrations/ORM).
+- Next.js Route Handlers under `app/api/*` for auth, ideas, and comments.
+- Full automated test suite (unit, component, integration, end-to-end) plus CI execution.
+
 ## Key Features Completed
 ### Authentication and Roles
 - Submitter registration and login

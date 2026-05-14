@@ -28,9 +28,8 @@ Build a reliable, user-friendly employee innovation management platform that enc
 - **UI Components**: shadcn/ui for consistency
 
 ### Database & Persistence
-- **Database**: SQLite for local development
-- **ORM**: Prepared for Prisma or similar
-- **Migrations**: Version-controlled schema changes
+- **MVP Persistence**: Browser localStorage with seed JSON files
+- **Production Roadmap**: SQLite/Postgres with ORM and migrations
 
 ---
 
@@ -39,18 +38,18 @@ Build a reliable, user-friendly employee innovation management platform that enc
 ### Phase 1: Specification
 1. Define user stories and acceptance criteria
 2. Create wireframes/mockups
-3. Plan API contracts
+3. Plan API contracts for production roadmap
 
 ### Phase 2: Implementation
 1. Create TypeScript types and interfaces
 2. Build components with Tailwind CSS
 3. Implement forms with React Hook Form + Zod validation
-4. Connect to backend/database
+4. For MVP, implement client-side services and local persistence
+5. Backend/database integration is production roadmap work
 
 ### Phase 3: Testing
-1. Unit tests for utilities and hooks
-2. Component testing with React Testing Library
-3. End-to-end testing with Playwright/Cypress
+1. MVP manual validation with type-check/lint/runtime checks
+2. Unit/component/E2E automation tracked as production roadmap work
 
 ### Phase 4: Documentation
 1. Update README with new features

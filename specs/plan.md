@@ -3,6 +3,8 @@
 **Total Sprint Duration:** 10 hours  
 **Phases:** 5 phases × ~2 hours each
 
+> Roadmap note: API route handlers, SQLite/database migration, and full automated testing are not part of current MVP implementation and are tracked as Future Improvement / Production Roadmap.
+
 ---
 
 ## Phase 0: Foundation (Setup Complete ✅)

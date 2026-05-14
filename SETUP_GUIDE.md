@@ -67,13 +67,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - [ ] Add status update functionality
 - [ ] Create admin routes
 
-#### Phase 4: Database Setup (Priority: Medium)
+#### Phase 4: Database Setup (Priority: Medium, Future Improvement / Production Roadmap)
 - [ ] Set up SQLite
 - [ ] Create database schema
 - [ ] Implement database layer
 - [ ] Create migrations
 
-#### Phase 5: Testing (Priority: Medium)
+#### Phase 5: Testing (Priority: Medium, Future Improvement / Production Roadmap)
 - [ ] Unit tests for utilities
 - [ ] Component tests
 - [ ] Integration tests

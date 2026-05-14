@@ -58,7 +58,7 @@ git commit -m "Phase 2: User authentication system - register, login, logout
 - Implemented login page with credential validation
 - Built session management in lib/auth.ts
 - Added logout functionality with session clearing
-- Created API routes: /api/auth/register, /api/auth/login
+- Implemented client-side auth workflow for MVP (no `app/api/*` handlers yet)
 - Added header component with logout button
 - Validated inputs with Zod schemas
 
@@ -80,7 +80,7 @@ git commit -m "Phase 3: Idea submission and listing - form, dashboard, details
 - Created idea submission form with file attachment support
 - Built submitter dashboard showing only user's own ideas
 - Implemented idea detail page with read-only comments section
-- Added API routes: POST/GET /api/ideas, GET /api/ideas/[id], DELETE /api/ideas/[id]
+- Implemented idea persistence/actions in `src/lib/ideas.ts` using localStorage
 - Submitters can view their ideas and see admin feedback
 - Status badges with color coding for visual clarity
 
@@ -103,7 +103,7 @@ git commit -m "Phase 4: Admin review dashboard - review interface, workflow, com
 - Built admin review interface for managing idea status
 - Implemented status update workflow: submitted → under_review → accepted/rejected  
 - Added comments/feedback system (admin write, submitter read)
-- Created API routes: PUT /api/ideas/[id]/status, POST/GET /api/ideas/[id]/comments
+- Implemented admin review actions in the client service layer (`src/lib/ideas.ts`)
 - Added admin-only route protection middleware
 - Comments display with admin name and timestamp
 
@@ -124,7 +124,7 @@ git commit -m "Phase 5: UI polish, error handling, end-to-end validation - MVP c
 
 - Improved Tailwind CSS styling for professional appearance
 - Added loading states and disabled buttons during async operations
-- Implemented comprehensive error handling in forms and API routes
+- Implemented comprehensive error handling in forms and client-side service actions
 - Added validation feedback messages for user guidance
 - Tested complete end-to-end workflows:
   ✓ Register submitter → submit idea → view idea
@@ -150,6 +150,18 @@ MVP Status: ✅ COMPLETE AND READY FOR DEMO
 Linked to: specs/spec.md (all), specs/tasks.md Phase 5, .specify/memory/constitution.md"
 
 git push origin main
+```
+
+---
+
+## Future Improvement / Production Roadmap Commits
+
+Use separate commits for deferred production work so the MVP scope stays clear:
+
+```bash
+git commit -m "roadmap: add app/api route handlers for auth and idea workflows"
+git commit -m "roadmap: migrate persistence layer from localStorage to SQLite"
+git commit -m "roadmap: add full automated test suite (unit/component/integration/e2e)"
 ```
 
 ---

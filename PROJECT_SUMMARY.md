@@ -42,6 +42,12 @@ The project was developed through phased, SpecKit-driven implementation with Git
 - admin status updates and comments
 - review timeline and latest feedback visibility
 
+## Future Improvement / Production Roadmap
+The following items were intentionally deferred and are not part of the shipped MVP:
+- Replace localStorage persistence with SQLite (or another production DB) and migration support.
+- Add Next.js API route handlers (`app/api/*`) for auth, idea CRUD, and comment workflows.
+- Introduce full automated testing coverage (unit, component, integration, and E2E) with CI automation.
+
 ## Technical Decisions
 - Next.js App Router selected as the sole routing architecture.
 - Local-first persistence chosen to keep MVP setup simple and evaluator-friendly.

@@ -3,6 +3,8 @@
 **Sprint:** 10-hour MVP Implementation  
 **Workflow:** SpecKit Specification-Driven Development  
 
+> Roadmap note: In the current MVP, API routes, SQLite migration, and full automated tests are deferred as Future Improvement / Production Roadmap items.
+
 ---
 
 ## Phase 1: Data Model & Persistence
