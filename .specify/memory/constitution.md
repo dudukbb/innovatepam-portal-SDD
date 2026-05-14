@@ -28,7 +28,7 @@ Build a reliable, user-friendly employee innovation management platform that enc
 - **UI Components**: shadcn/ui for consistency
 
 ### Database & Persistence
-- **MVP Persistence**: Browser localStorage with seed JSON files
+- **MVP Persistence**: Browser localStorage with seed JSON files (no SQLite in MVP)
 - **Production Roadmap**: SQLite/Postgres with ORM and migrations
 
 ---
@@ -49,7 +49,7 @@ Build a reliable, user-friendly employee innovation management platform that enc
 
 ### Phase 3: Testing
 1. MVP manual validation with type-check/lint/runtime checks
-2. Unit/component/E2E automation tracked as production roadmap work
+2. Automated unit/component/E2E tests are tracked as production roadmap work (not implemented in MVP)
 
 ### Phase 4: Documentation
 1. Update README with new features
@@ -156,13 +156,13 @@ Build a reliable, user-friendly employee innovation management platform that enc
 
 ---
 
-## Definition of Done (Feature)
+### Definition of Done (Feature)
 
 - [x] Feature specification complete
 - [x] TypeScript types defined
 - [x] Components implemented
 - [x] Forms validated with Zod
-- [x] Tests written (unit/component)
+- [ ] Tests written (unit/component) _(tracked as roadmap, not MVP)_
 - [x] Accessibility checked
 - [x] Documentation updated
 - [x] Code review passed
@@ -172,7 +172,7 @@ Build a reliable, user-friendly employee innovation management platform that enc
 
 ## Project Success Metrics
 
-1. **Code Quality**: TypeScript strict mode, ESLint pass, >80% test coverage
+1. **Code Quality**: TypeScript strict mode, ESLint pass, manual validation for MVP; >80% test coverage is a roadmap goal
 2. **User Experience**: Responsive design, <3s page load, accessible
 3. **Maintainability**: Clear naming, documented architecture, easy onboarding
 4. **Functionality**: All acceptance criteria met, no critical bugs
