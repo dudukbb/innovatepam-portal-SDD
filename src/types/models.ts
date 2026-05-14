@@ -30,6 +30,8 @@ export interface Comment {
   id: string;
   ideaId: string;
   createdById: string;
-  content: string;
+  authorName: string;
+  role: UserRole;
+  message: string;
   createdAt: string;
 }

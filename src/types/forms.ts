@@ -20,8 +20,8 @@ export const ideaSubmissionFormSchema = z.object({
 });
 
 export const adminReviewFormSchema = z.object({
-  status: z.enum(['under_review', 'accepted', 'rejected']),
-  comment: z.string().min(3),
+  status: z.enum(['submitted', 'under_review', 'accepted', 'rejected']),
+  comment: z.string().min(3).optional(),
 });
 
 export const commentFormSchema = z.object({

@@ -85,6 +85,11 @@ export async function findUserByEmail(email: string): Promise<User | undefined> 
   return users.find((user) => user.email.toLowerCase() === email.toLowerCase());
 }
 
+export async function findUserById(id: string): Promise<User | undefined> {
+  const users = await getAllUsers();
+  return users.find((user) => user.id === id);
+}
+
 export async function addUser(user: User): Promise<void> {
   const users = await getAllUsers();
   users.push(user);

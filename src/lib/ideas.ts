@@ -1,4 +1,4 @@
-import { Comment, Idea } from '../types/models';
+import { Comment, Idea, IdeaStatus } from '../types/models';
 
 const IDEAS_KEY = 'innovatepam_ideas';
 const COMMENTS_KEY = 'innovatepam_comments';
@@ -63,6 +63,12 @@ export async function getAllIdeas(): Promise<Idea[]> {
   return readLocalStorage<Idea[]>(IDEAS_KEY, []);
 }
 
+export async function getIdeasByStatus(status: IdeaStatus | 'all'): Promise<Idea[]> {
+  const ideas = await getAllIdeas();
+  if (status === 'all') return ideas;
+  return ideas.filter((idea) => idea.status === status);
+}
+
 export async function getIdeasByUser(userId: string): Promise<Idea[]> {
   const ideas = await getAllIdeas();
   return ideas.filter((idea) => idea.createdById === userId);
@@ -79,8 +85,64 @@ export async function addIdea(idea: Idea): Promise<void> {
   writeLocalStorage(IDEAS_KEY, ideas);
 }
 
+export function isValidStatusTransition(current: IdeaStatus, next: IdeaStatus): boolean {
+  const allowed: Record<IdeaStatus, IdeaStatus[]> = {
+    submitted: ['submitted', 'under_review'],
+    under_review: ['under_review', 'accepted', 'rejected'],
+    accepted: ['accepted'],
+    rejected: ['rejected'],
+  };
+
+  return allowed[current].includes(next);
+}
+
+export async function updateIdeaStatus(ideaId: string, nextStatus: IdeaStatus): Promise<{ success: boolean; error?: string }> {
+  const ideas = await getAllIdeas();
+  const index = ideas.findIndex((idea) => idea.id === ideaId);
+
+  if (index < 0) {
+    return { success: false, error: 'Idea not found.' };
+  }
+
+  const current = ideas[index];
+  if (!isValidStatusTransition(current.status, nextStatus)) {
+    return { success: false, error: `Invalid transition from ${current.status} to ${nextStatus}.` };
+  }
+
+  ideas[index] = {
+    ...current,
+    status: nextStatus,
+    updatedAt: new Date().toISOString(),
+  };
+
+  writeLocalStorage(IDEAS_KEY, ideas);
+  return { success: true };
+}
+
 export async function getCommentsByIdeaId(ideaId: string): Promise<Comment[]> {
   await ensureCommentsSeeded();
   const comments = readLocalStorage<Comment[]>(COMMENTS_KEY, []);
   return comments.filter((comment) => comment.ideaId === ideaId);
+}
+
+export async function addAdminComment(
+  ideaId: string,
+  reviewer: { id: string; name: string; role: 'submitter' | 'admin' },
+  message: string
+): Promise<void> {
+  await ensureCommentsSeeded();
+  const comments = readLocalStorage<Comment[]>(COMMENTS_KEY, []);
+
+  const newComment: Comment = {
+    id: typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : `comment-${Date.now()}`,
+    ideaId,
+    createdById: reviewer.id,
+    authorName: reviewer.name,
+    role: reviewer.role,
+    message,
+    createdAt: new Date().toISOString(),
+  };
+
+  comments.push(newComment);
+  writeLocalStorage(COMMENTS_KEY, comments);
 }
