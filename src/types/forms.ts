@@ -13,13 +13,14 @@ export const loginFormSchema = z.object({
 });
 
 export const ideaSubmissionFormSchema = z.object({
-  title: z.string().min(3),
-  description: z.string().min(10),
-  category: z.enum(['innovation', 'process', 'product', 'other']),
+  title: z.string().min(5, 'Title must be at least 5 characters.'),
+  description: z.string().min(20, 'Description must be at least 20 characters.'),
+  category: z.enum(['innovation', 'process', 'product', 'other']).optional(),
+  fileUrl: z.string().optional(),
 });
 
 export const adminReviewFormSchema = z.object({
-  status: z.enum(['approved', 'rejected', 'review']),
+  status: z.enum(['under_review', 'accepted', 'rejected']),
   comment: z.string().min(3),
 });
 

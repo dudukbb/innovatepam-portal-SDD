@@ -10,7 +10,7 @@ export interface User {
   passwordHash: string; // For demo only; never store plaintext in real apps
 }
 
-export type IdeaStatus = 'draft' | 'submitted' | 'review' | 'approved' | 'rejected';
+export type IdeaStatus = 'submitted' | 'under_review' | 'accepted' | 'rejected';
 
 export type IdeaCategory = 'innovation' | 'process' | 'product' | 'other';
 
@@ -18,9 +18,10 @@ export interface Idea {
   id: string;
   title: string;
   description: string;
-  authorId: string;
+  createdById: string;
   status: IdeaStatus;
-  category: IdeaCategory;
+  category?: IdeaCategory;
+  fileUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -28,7 +29,7 @@ export interface Idea {
 export interface Comment {
   id: string;
   ideaId: string;
-  authorId: string;
+  createdById: string;
   content: string;
   createdAt: string;
 }
